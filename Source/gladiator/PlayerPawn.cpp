@@ -45,6 +45,16 @@ APlayerPawn::APlayerPawn()
 	skmesh = CreateDefaultSubobject<USkeletalMeshComponent>("skeletal mesh");
 	skmesh->SetupAttachment(RootComponent);
 
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> mesh(TEXT("/Game/Characters/DwarfGrunt/SkelMesh/DwarfGrunt_R_new"));
+
+	if (mesh.Succeeded())
+	{
+		skmesh->SetSkeletalMesh(mesh.Object);
+		skmesh->SetRelativeLocation(FVector(0.f, 0.f, -40.f));
+		skmesh->SetWorldScale3D(FVector(.7f));
+		skmesh->SetWorldRotation(FRotator(0.f,-90.f,0.f));
+	}
+
 	cameraBoom = CreateDefaultSubobject<USpringArmComponent>("spring arm");
 	cameraBoom->SetupAttachment(RootComponent);
 

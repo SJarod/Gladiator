@@ -18,6 +18,10 @@ private:
 	UPROPERTY(EditAnywhere)
 		USkeletalMeshComponent* skmesh;
 	UPROPERTY(EditAnywhere)
+		USkeletalMeshComponent* skhammer;
+	UPROPERTY(EditAnywhere)
+		USkeletalMeshComponent* skshield;
+	UPROPERTY(EditAnywhere)
 		float speed = 1.f;
 	UPROPERTY(EditAnywhere)
 		float jumpForce = 1.f;

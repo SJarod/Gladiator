@@ -19,6 +19,8 @@ private:
 		USkeletalMeshComponent* skmesh;
 	UPROPERTY(EditAnywhere)
 		float speed = 1.f;
+	UPROPERTY(EditAnywhere)
+		float jumpForce = 1.f;
 
 	UPROPERTY(VisibleAnywhere)
 		class USpringArmComponent*			cameraBoom;
@@ -26,6 +28,10 @@ private:
 		class UCameraComponent*				camera;
 	UPROPERTY(VisibleAnywhere)
 		class UCharacterMovementComponent*	characterMovement;
+
+	void jump();
+	void moveForward(float value);
+	void moveRight(float value);
 
 public:
 	// Sets default values for this pawn's properties

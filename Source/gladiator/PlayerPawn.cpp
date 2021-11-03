@@ -10,6 +10,29 @@
 
 #include "GameFramework/CharacterMovementComponent.h"
 
+void APlayerPawn::jump()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("jumping"));
+}
+
+void APlayerPawn::moveForward(float value)
+{
+	if (!Controller || (value == 0.f))
+		return;
+
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("moving forward"));
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, *FString::SanitizeFloat(value));
+}
+
+void APlayerPawn::moveRight(float value)
+{
+	if (!Controller || (value == 0.f))
+		return;
+
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("moving right"));
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, *FString::SanitizeFloat(value));
+}
+
 // Sets default values
 APlayerPawn::APlayerPawn()
 {
@@ -49,5 +72,8 @@ void APlayerPawn::Tick(float DeltaTime)
 // Called to bind functionality to input
 void APlayerPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
+	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &APlayerPawn::jump);
+
+	PlayerInputComponent->BindAxis("MoveForward", this, &APlayerPawn::moveForward);
+	PlayerInputComponent->BindAxis("MoveRight", this, &APlayerPawn::moveRight);
 }

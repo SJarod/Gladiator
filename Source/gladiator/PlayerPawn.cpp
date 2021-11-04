@@ -20,8 +20,10 @@ void APlayerPawn::jump()
 
 void APlayerPawn::moveForward(float value)
 {
+	FBSpeed = value;
 	if (!Controller || (value == 0.f))
 		return;
+
 
 	FVector dir(1.f, 0.f, 0.f);
 	AddMovementInput(dir, value);
@@ -29,8 +31,10 @@ void APlayerPawn::moveForward(float value)
 
 void APlayerPawn::moveRight(float value)
 {
+	LRSpeed = value;
 	if (!Controller || (value == 0.f))
 		return;
+
 
 	FVector dir(0.f, 1.f, 0.f);
 	AddMovementInput(dir, value);
@@ -67,7 +71,7 @@ APlayerPawn::APlayerPawn()
 	if (mesh.Succeeded())
 	{
 		skmesh->SetSkeletalMesh(mesh.Object);
-		skmesh->SetRelativeLocation(FVector(0.f, 0.f, -40.f));
+		skmesh->SetRelativeLocation(FVector(0.f, 0.f, -45.f));
 		skmesh->SetWorldScale3D(FVector(.7f));
 		skmesh->SetWorldRotation(FRotator(0.f,-90.f,0.f));
 	}
@@ -91,6 +95,8 @@ APlayerPawn::APlayerPawn()
 	camera->SetupAttachment(cameraBoom, USpringArmComponent::SocketName);
 	camera->SetActive(true);
 
+	static ConstructorHelpers::FObjectFinder<UAnimBlueprint> animbp(TEXT("/Game/Characters/DwarfGrunt/Blueprint/DwarfAnimationBP.DwarfAnimationBP"));
+	skmesh->SetAnimInstanceClass(animbp.Object->GeneratedClass);
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
 
 	floatingPawnMovement = CreateDefaultSubobject<UFloatingPawnMovement>("floating pawn movement");

@@ -27,6 +27,11 @@ private:
 	UPROPERTY(EditAnywhere)
 	float jumpForce = 1.f;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	float FBSpeed;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	float LRSpeed;
+
 	UPROPERTY(VisibleAnywhere)
 	class USpringArmComponent*		cameraBoom;
 	UPROPERTY(VisibleAnywhere)

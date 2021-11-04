@@ -14,8 +14,13 @@ class GLADIATOR_API APlayerPawn : public APawn
 private:
 	UPROPERTY(VisibleAnywhere)
 	class UCapsuleComponent*	capsule;
-	UPROPERTY(VisibleAnywhere)
+
+	UPROPERTY(EditAnywhere)
 	USkeletalMeshComponent*		skmesh;
+	UPROPERTY(EditAnywhere)
+	USkeletalMeshComponent* 	skhammer;
+	UPROPERTY(EditAnywhere)
+	USkeletalMeshComponent* 	skshield;
 
 	UPROPERTY(EditAnywhere)
 	float speed = 1.f;

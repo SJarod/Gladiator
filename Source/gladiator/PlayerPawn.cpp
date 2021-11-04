@@ -57,6 +57,33 @@ APlayerPawn::APlayerPawn()
 	skmesh = CreateDefaultSubobject<USkeletalMeshComponent>("skeletal mesh");
 	skmesh->SetupAttachment(RootComponent);
 
+	skhammer = CreateDefaultSubobject<USkeletalMeshComponent>("hammer");
+	skshield = CreateDefaultSubobject<USkeletalMeshComponent>("shield");
+
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> mesh(TEXT("/Game/Characters/DwarfGrunt/SkelMesh/DwarfGrunt_R_new"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> hammer(TEXT("/Game/Characters/DwarfGrunt/SkelMesh/WarHammer"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> shield(TEXT("/Game/Characters/DwarfGrunt/SkelMesh/Shield_Skel"));
+
+	if (mesh.Succeeded())
+	{
+		skmesh->SetSkeletalMesh(mesh.Object);
+		skmesh->SetRelativeLocation(FVector(0.f, 0.f, -40.f));
+		skmesh->SetWorldScale3D(FVector(.7f));
+		skmesh->SetWorldRotation(FRotator(0.f,-90.f,0.f));
+	}
+
+	if (hammer.Succeeded())
+	{
+		skhammer->SetSkeletalMesh(hammer.Object);
+	}
+
+	if (shield.Succeeded())
+	{
+		skshield->SetSkeletalMesh(shield.Object);
+	}
+
+	skhammer->SetupAttachment(skmesh, FName(TEXT("WeaponPoint")));
+	skshield->SetupAttachment(skmesh, FName(TEXT("DualWeaponPoint")));
 	cameraBoom = CreateDefaultSubobject<USpringArmComponent>("spring arm");
 	cameraBoom->SetupAttachment(RootComponent);
 

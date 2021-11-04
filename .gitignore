@@ -40,6 +40,9 @@
 # Visual Studio 2015 user specific files
 .vs/
 
+# git merge original files
+*.orig
+
 # Compiled Object files
 
 # Precompiled Headers

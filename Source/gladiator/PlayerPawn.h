@@ -15,11 +15,11 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	class UCapsuleComponent*	capsule;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(VisibleAnywhere)
 	USkeletalMeshComponent*		skmesh;
-	UPROPERTY(EditAnywhere)
-	USkeletalMeshComponent* 	skhammer;
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(VisibleAnywhere)
+	USkeletalMeshComponent*		skhammer;
+	UPROPERTY(VisibleAnywhere)
 	USkeletalMeshComponent* 	skshield;
 
 	UPROPERTY(EditAnywhere)

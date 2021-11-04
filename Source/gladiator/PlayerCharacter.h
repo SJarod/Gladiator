@@ -12,6 +12,11 @@ class GLADIATOR_API APlayerCharacter : public ACharacter
 	GENERATED_BODY()
 
 private:
+	UPROPERTY(VisibleAnywhere)
+	USkeletalMeshComponent* skhammer;
+	UPROPERTY(VisibleAnywhere)
+	USkeletalMeshComponent* skshield;
+
 	UPROPERTY(EditAnywhere)
 	float speed = 1.f;
 	UPROPERTY(EditAnywhere)

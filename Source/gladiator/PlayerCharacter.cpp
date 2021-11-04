@@ -46,6 +46,34 @@ APlayerCharacter::APlayerCharacter()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
+	skhammer = CreateDefaultSubobject<USkeletalMeshComponent>("hammer");
+	skshield = CreateDefaultSubobject<USkeletalMeshComponent>("shield");
+
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> mesh(TEXT("/Game/Characters/DwarfGrunt/SkelMesh/DwarfGrunt_R_new"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> hammer(TEXT("/Game/Characters/DwarfGrunt/SkelMesh/WarHammer"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> shield(TEXT("/Game/Characters/DwarfGrunt/SkelMesh/Shield_Skel"));
+
+	if (mesh.Succeeded())
+	{
+		GetMesh()->SetSkeletalMesh(mesh.Object);
+		GetMesh()->SetRelativeLocation(FVector(0.f, 0.f, -40.f));
+		GetMesh()->SetWorldScale3D(FVector(.7f));
+		GetMesh()->SetWorldRotation(FRotator(0.f, -90.f, 0.f));
+	}
+
+	if (hammer.Succeeded())
+	{
+		skhammer->SetSkeletalMesh(hammer.Object);
+	}
+
+	if (shield.Succeeded())
+	{
+		skshield->SetSkeletalMesh(shield.Object);
+	}
+
+	skhammer->SetupAttachment(GetMesh(), FName(TEXT("WeaponPoint")));
+	skshield->SetupAttachment(GetMesh(), FName(TEXT("DualWeaponPoint")));
+
 	// Don't rotate when the controller rotates. Let that just affect the camera.
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;

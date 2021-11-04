@@ -12,6 +12,8 @@
 
 void APlayerCharacter::moveForward(float value)
 {
+	FBSpeed = value * speed;
+
 	if (!Controller || (value == 0.f))
 		return;
 
@@ -26,6 +28,8 @@ void APlayerCharacter::moveForward(float value)
 
 void APlayerCharacter::moveRight(float value)
 {
+	LRSpeed = value * speed;
+
 	if (!Controller || (value == 0.f))
 		return;
 
@@ -131,6 +135,9 @@ APlayerCharacter::APlayerCharacter()
 	camera->SetupAttachment(cameraBoom, USpringArmComponent::SocketName);
 	camera->SetActive(true);
 	camera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
+
+	static ConstructorHelpers::FObjectFinder<UAnimBlueprint> animbp(TEXT("/Game/Characters/DwarfGrunt/Blueprint/DwarfAnimationBP.DwarfAnimationBP"));
+	GetMesh()->SetAnimInstanceClass(animbp.Object->GeneratedClass);
 
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
 }

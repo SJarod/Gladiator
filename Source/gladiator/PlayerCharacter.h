@@ -31,7 +31,13 @@ private:
 	UPROPERTY(EditAnywhere)
 	float zoomSpeed = 10.f;
 
-	bool attacking = false;
+	//for the animation blueprint
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	float FBSpeed;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	float LRSpeed;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	bool  attacking = false;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class USpringArmComponent* cameraBoom;

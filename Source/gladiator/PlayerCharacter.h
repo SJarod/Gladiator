@@ -18,6 +18,8 @@ private:
 	float jumpForce = 420.f;
 	UPROPERTY(EditAnywhere)
 	float airControl = 0.2f;
+	UPROPERTY(EditAnywhere)
+	float zoomSpeed = 10.f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class USpringArmComponent* cameraBoom;
@@ -26,6 +28,7 @@ private:
 
 	void moveForward(float value);
 	void moveRight(float value);
+	void viewZoom(float value);
 
 public:
 	// Sets default values for this character's properties

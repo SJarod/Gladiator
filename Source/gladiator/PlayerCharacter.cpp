@@ -35,6 +35,11 @@ void APlayerCharacter::moveRight(float value)
 	AddMovementInput(Direction, value * speed);
 }
 
+void APlayerCharacter::viewZoom(float value)
+{
+	cameraBoom->TargetArmLength += value * zoomSpeed;
+}
+
 // Sets default values
 APlayerCharacter::APlayerCharacter()
 {
@@ -84,4 +89,6 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 	PlayerInputComponent->BindAxis("ViewYaw", this, &APawn::AddControllerYawInput);
 	PlayerInputComponent->BindAxis("ViewPitch", this, &APawn::AddControllerPitchInput);
+
+	PlayerInputComponent->BindAxis("ViewZoom", this, &APlayerCharacter::viewZoom);
 }

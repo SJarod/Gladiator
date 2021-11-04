@@ -49,10 +49,12 @@ void APlayerCharacter::viewZoom(float value)
 
 void APlayerCharacter::attack()
 {
-	attacking = true;
-	//timer
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("attacking"));
-	attacking = true;
+	canAttack = false;
+}
+
+void APlayerCharacter::takeDamage()
+{
+	--health;
 }
 
 // Sets default values
@@ -140,6 +142,8 @@ APlayerCharacter::APlayerCharacter()
 	GetMesh()->SetAnimInstanceClass(animbp.Object->GeneratedClass);
 
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
+
+	health = maxHealth;
 }
 
 // Called when the game starts or when spawned

@@ -22,6 +22,10 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	class UBoxComponent*		shieldCollider;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	float health = 5.f;
+	UPROPERTY(EditAnywhere)
+	float maxHealth = 5.f;
 	UPROPERTY(EditAnywhere)
 	float speed = 1.f;
 	UPROPERTY(EditAnywhere)
@@ -36,7 +40,9 @@ private:
 	float FBSpeed;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	float LRSpeed;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	bool  canAttack = true;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	bool  attacking = false;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
@@ -47,7 +53,9 @@ private:
 	void moveForward(float value);
 	void moveRight(float value);
 	void viewZoom(float value);
+
 	void attack();
+	void takeDamage();
 
 public:
 	// Sets default values for this character's properties

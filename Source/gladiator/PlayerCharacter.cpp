@@ -7,6 +7,9 @@
 
 #include "GameFramework/CharacterMovementComponent.h"
 
+#include "Components/CapsuleComponent.h"
+#include "Components/BoxComponent.h"
+
 void APlayerCharacter::moveForward(float value)
 {
 	if (!Controller || (value == 0.f))
@@ -40,12 +43,40 @@ void APlayerCharacter::viewZoom(float value)
 	cameraBoom->TargetArmLength += value * zoomSpeed;
 }
 
+void APlayerCharacter::attack()
+{
+	attacking = true;
+	//timer
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("attacking"));
+	attacking = true;
+}
+
 // Sets default values
 APlayerCharacter::APlayerCharacter()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
+	//set weapons collider
+	hammerCollider = CreateDefaultSubobject<UCapsuleComponent>("hammer collider");
+	hammerCollider->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	hammerCollider->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
+	hammerCollider->CanCharacterStepUpOn = ECB_No;
+	hammerCollider->SetCanEverAffectNavigation(false);
+	hammerCollider->SetRelativeLocation(FVector(0.f, 57.f, 0.f));
+	hammerCollider->SetWorldRotation(FRotator(0.f, 0.f, 0.f));
+	hammerCollider->SetWorldScale3D(FVector(0.6f));
+
+	shieldCollider = CreateDefaultSubobject<UBoxComponent>("shield collider");
+	shieldCollider->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	shieldCollider->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
+	shieldCollider->CanCharacterStepUpOn = ECB_No;
+	shieldCollider->SetCanEverAffectNavigation(false);
+	shieldCollider->SetRelativeLocation(FVector(0.f, 15.f, -5.f));
+	shieldCollider->SetWorldRotation(FRotator(0.f, 0.f, 0.f));
+	shieldCollider->SetWorldScale3D(FVector(1.f, 0.28f, 1.f));
+
+	//set weapons meshes
 	skhammer = CreateDefaultSubobject<USkeletalMeshComponent>("hammer");
 	skshield = CreateDefaultSubobject<USkeletalMeshComponent>("shield");
 
@@ -56,9 +87,13 @@ APlayerCharacter::APlayerCharacter()
 	if (mesh.Succeeded())
 	{
 		GetMesh()->SetSkeletalMesh(mesh.Object);
-		GetMesh()->SetRelativeLocation(FVector(0.f, 0.f, -40.f));
-		GetMesh()->SetWorldScale3D(FVector(.7f));
+
+		GetMesh()->SetRelativeLocation(FVector(0.f, 0.f, -91.f));
 		GetMesh()->SetWorldRotation(FRotator(0.f, -90.f, 0.f));
+		GetMesh()->SetWorldScale3D(FVector(1.f, 1.f, 1.5f));
+
+		GetCapsuleComponent()->SetWorldRotation(FRotator(0.f, 0.f, 0.f));
+		GetCapsuleComponent()->SetWorldScale3D(FVector(0.7f, 0.7f, 0.45f));
 	}
 
 	if (hammer.Succeeded())
@@ -73,6 +108,9 @@ APlayerCharacter::APlayerCharacter()
 
 	skhammer->SetupAttachment(GetMesh(), FName(TEXT("WeaponPoint")));
 	skshield->SetupAttachment(GetMesh(), FName(TEXT("DualWeaponPoint")));
+
+	hammerCollider->SetupAttachment(skhammer);
+	shieldCollider->SetupAttachment(skshield);
 
 	// Don't rotate when the controller rotates. Let that just affect the camera.
 	bUseControllerRotationPitch = false;
@@ -119,4 +157,6 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAxis("ViewPitch", this, &APawn::AddControllerPitchInput);
 
 	PlayerInputComponent->BindAxis("ViewZoom", this, &APlayerCharacter::viewZoom);
+
+	PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &APlayerCharacter::attack);
 }

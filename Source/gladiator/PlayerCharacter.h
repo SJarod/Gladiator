@@ -17,6 +17,11 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	USkeletalMeshComponent* skshield;
 
+	UPROPERTY(VisibleAnywhere)
+	class UCapsuleComponent*	hammerCollider;
+	UPROPERTY(VisibleAnywhere)
+	class UBoxComponent*		shieldCollider;
+
 	UPROPERTY(EditAnywhere)
 	float speed = 1.f;
 	UPROPERTY(EditAnywhere)
@@ -26,6 +31,8 @@ private:
 	UPROPERTY(EditAnywhere)
 	float zoomSpeed = 10.f;
 
+	bool attacking = false;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class USpringArmComponent* cameraBoom;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
@@ -34,6 +41,7 @@ private:
 	void moveForward(float value);
 	void moveRight(float value);
 	void viewZoom(float value);
+	void attack();
 
 public:
 	// Sets default values for this character's properties

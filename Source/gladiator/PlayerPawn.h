@@ -13,21 +13,21 @@ class GLADIATOR_API APlayerPawn : public APawn
 
 private:
 	UPROPERTY(VisibleAnywhere)
-		class UCapsuleComponent*	capsule;
+	class UCapsuleComponent*	capsule;
 	UPROPERTY(VisibleAnywhere)
-		USkeletalMeshComponent*		skmesh;
+	USkeletalMeshComponent*		skmesh;
 
 	UPROPERTY(EditAnywhere)
-		float speed = 1.f;
+	float speed = 1.f;
 	UPROPERTY(EditAnywhere)
-		float jumpForce = 1.f;
+	float jumpForce = 1.f;
 
 	UPROPERTY(VisibleAnywhere)
-		class USpringArmComponent*		cameraBoom;
+	class USpringArmComponent*		cameraBoom;
 	UPROPERTY(VisibleAnywhere)
-		class UCameraComponent*			camera;
+	class UCameraComponent*			camera;
 	UPROPERTY(VisibleAnywhere)
-		class UPawnMovementComponent*	floatingPawnMovement;
+	class UPawnMovementComponent*	floatingPawnMovement;
 
 	void jump();
 	void moveForward(float value);

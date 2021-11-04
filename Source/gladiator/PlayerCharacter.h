@@ -13,14 +13,16 @@ class GLADIATOR_API APlayerCharacter : public ACharacter
 
 private:
 	UPROPERTY(EditAnywhere)
-		float speed = 1.f;
+	float speed = 1.f;
 	UPROPERTY(EditAnywhere)
-		float jumpForce = 1.f;
+	float jumpForce = 420.f;
+	UPROPERTY(EditAnywhere)
+	float airControl = 0.2f;
 
-	UPROPERTY(VisibleAnywhere)
-		class USpringArmComponent* cameraBoom;
-	UPROPERTY(VisibleAnywhere)
-		class UCameraComponent* camera;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	class USpringArmComponent* cameraBoom;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	class UCameraComponent* camera;
 
 	void moveForward(float value);
 	void moveRight(float value);
@@ -33,10 +35,7 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
+public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 };

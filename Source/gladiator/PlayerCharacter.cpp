@@ -12,6 +12,9 @@
 
 void APlayerCharacter::moveForward(float value)
 {
+	if (playAttack)
+		return;
+
 	FBSpeed = value * speed;
 
 	if (!Controller || (value == 0.f))
@@ -28,6 +31,9 @@ void APlayerCharacter::moveForward(float value)
 
 void APlayerCharacter::moveRight(float value)
 {
+	if (playAttack)
+		return;
+
 	LRSpeed = value * speed;
 
 	if (!Controller || (value == 0.f))
@@ -49,7 +55,7 @@ void APlayerCharacter::viewZoom(float value)
 
 void APlayerCharacter::attack()
 {
-	canAttack = false;
+	playAttack = true;
 }
 
 void APlayerCharacter::takeDamage()

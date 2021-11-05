@@ -22,10 +22,8 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	class UBoxComponent*		shieldCollider;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	float health = 5.f;
 	UPROPERTY(EditAnywhere)
-	float maxHealth = 5.f;
+	int   maxHealth = 5;
 	UPROPERTY(EditAnywhere)
 	float speed = 1.f;
 	UPROPERTY(EditAnywhere)
@@ -41,9 +39,7 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	float LRSpeed;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	bool  canAttack = true;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	bool  attacking = false;
+	bool  playAttack = false;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class USpringArmComponent* cameraBoom;
@@ -58,6 +54,11 @@ private:
 	void takeDamage();
 
 public:
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	int  health = 5;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	bool attacking = false;
+
 	// Sets default values for this character's properties
 	APlayerCharacter();
 

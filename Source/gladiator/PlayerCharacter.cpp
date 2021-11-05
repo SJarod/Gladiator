@@ -10,6 +10,8 @@
 #include "Components/CapsuleComponent.h"
 #include "Components/BoxComponent.h"
 
+#include "Components/TimelineComponent.h"
+
 void APlayerCharacter::moveForward(float value)
 {
 	if (playAttack)
@@ -48,6 +50,14 @@ void APlayerCharacter::moveRight(float value)
 	AddMovementInput(Direction, value * speed);
 }
 
+void APlayerCharacter::jump()
+{
+	if (playAttack || !Controller)
+		return;
+
+	Jump();
+}
+
 void APlayerCharacter::viewZoom(float value)
 {
 	cameraBoom->TargetArmLength += value * zoomSpeed;
@@ -55,7 +65,29 @@ void APlayerCharacter::viewZoom(float value)
 
 void APlayerCharacter::attack()
 {
+	if (playAttack || !Controller)
+		return;
+
 	playAttack = true;
+
+	GetWorldTimerManager().ClearTimer(timeHandle);
+	GetWorldTimerManager().SetTimer(timeHandle, this, &APlayerCharacter::endAttack, attackTimeRate, false);
+}
+
+void APlayerCharacter::endAttack()
+{
+	playAttack = false;
+}
+
+void APlayerCharacter::block()
+{
+	endAttack();
+	playBlock = true;
+}
+
+void APlayerCharacter::unblock()
+{
+	playBlock = false;
 }
 
 void APlayerCharacter::takeDamage()
@@ -66,7 +98,7 @@ void APlayerCharacter::takeDamage()
 // Sets default values
 APlayerCharacter::APlayerCharacter()
 {
-	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this character not to call Tick() every frame. You can turn this on to call Tick() every frame but lose performance if you need it.
 	PrimaryActorTick.bCanEverTick = false;
 
 	//set weapons collider
@@ -165,7 +197,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 	check(PlayerInputComponent);
 
-	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
+	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &APlayerCharacter::jump);
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &APlayerCharacter::moveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &APlayerCharacter::moveRight);
@@ -176,4 +208,6 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAxis("ViewZoom", this, &APlayerCharacter::viewZoom);
 
 	PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &APlayerCharacter::attack);
+	PlayerInputComponent->BindAction("Block", IE_Pressed, this, &APlayerCharacter::block);
+	PlayerInputComponent->BindAction("Block", IE_Released, this, &APlayerCharacter::unblock);
 }

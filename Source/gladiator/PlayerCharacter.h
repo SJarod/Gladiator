@@ -40,17 +40,30 @@ private:
 	float LRSpeed;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	bool  playAttack = false;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	bool  playBlock = false;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class USpringArmComponent* cameraBoom;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* camera;
 
+	FTimerHandle timeHandle;
+	UPROPERTY(EditAnywhere)
+	float attackTimeRate = 0.5f;
+
 	void moveForward(float value);
 	void moveRight(float value);
+	void jump();
 	void viewZoom(float value);
 
 	void attack();
+	UFUNCTION()
+	void endAttack();
+
+	void block();
+	void unblock();
+
 	void takeDamage();
 
 public:

@@ -14,7 +14,7 @@
 
 void APlayerCharacter::moveForward(float value)
 {
-	if (playAttack)
+	if (playAttack || playBlock)
 		return;
 
 	FBSpeed = value * speed;
@@ -33,7 +33,7 @@ void APlayerCharacter::moveForward(float value)
 
 void APlayerCharacter::moveRight(float value)
 {
-	if (playAttack)
+	if (playAttack || playBlock)
 		return;
 
 	LRSpeed = value * speed;
@@ -52,7 +52,7 @@ void APlayerCharacter::moveRight(float value)
 
 void APlayerCharacter::jump()
 {
-	if (playAttack || !Controller)
+	if (!Controller || playAttack || playBlock)
 		return;
 
 	Jump();
@@ -65,7 +65,7 @@ void APlayerCharacter::viewZoom(float value)
 
 void APlayerCharacter::attack()
 {
-	if (playAttack || !Controller)
+	if (playBlock || playAttack || !Controller)
 		return;
 
 	playAttack = true;
@@ -170,6 +170,7 @@ APlayerCharacter::APlayerCharacter()
 	cameraBoom = CreateDefaultSubobject<USpringArmComponent>("spring arm");
 	cameraBoom->SetupAttachment(RootComponent);
 	cameraBoom->bUsePawnControlRotation = true; // Rotate the arm based on the controller
+	cameraBoom->ProbeChannel = ECC_Visibility;
 
 	camera = CreateDefaultSubobject<UCameraComponent>("camera");
 	camera->SetupAttachment(cameraBoom, USpringArmComponent::SocketName);

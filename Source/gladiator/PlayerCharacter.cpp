@@ -93,6 +93,9 @@ void APlayerCharacter::unblock()
 void APlayerCharacter::takeDamage()
 {
 	--health;
+
+	if (health <= 0)
+		dead = true;
 }
 
 // Sets default values
@@ -164,8 +167,6 @@ APlayerCharacter::APlayerCharacter()
 	// Configure character movement
 	GetCharacterMovement()->bOrientRotationToMovement = true; // Character moves in the direction of input...	
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 540.0f, 0.0f); // ...at this rotation rate
-	GetCharacterMovement()->JumpZVelocity = jumpForce;
-	GetCharacterMovement()->AirControl = airControl;
 
 	cameraBoom = CreateDefaultSubobject<USpringArmComponent>("spring arm");
 	cameraBoom->SetupAttachment(RootComponent);
@@ -181,14 +182,16 @@ APlayerCharacter::APlayerCharacter()
 	GetMesh()->SetAnimInstanceClass(animbp.Object->GeneratedClass);
 
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
-
-	health = maxHealth;
 }
 
 // Called when the game starts or when spawned
 void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	GetCharacterMovement()->JumpZVelocity = jumpForce;
+	GetCharacterMovement()->AirControl = airControl;
+
+	health = maxHealth;
 }
 
 // Called to bind functionality to input

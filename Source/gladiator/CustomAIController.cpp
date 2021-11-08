@@ -8,6 +8,7 @@
 #include "UObject/ConstructorHelpers.h"
 
 #include "PlayerCharacter.h"
+#include "Kismet/GameplayStatics.h"
 
 UBlackboardComponent* ACustomAIController::getBB() const
 {
@@ -33,6 +34,8 @@ void ACustomAIController::BeginPlay()
 	Super::BeginPlay();
 	RunBehaviorTree(btree);
 	behaviorTreeComponent->StartTree(*btree);
+
+	blackboard->SetValueAsObject("player", UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
 }
 
 void ACustomAIController::Tick(float DeltaTime)
@@ -41,4 +44,7 @@ void ACustomAIController::Tick(float DeltaTime)
 	APlayerCharacter* me = Cast<APlayerCharacter>(GetPawn());
 	blackboard->SetValueAsString("Debug", me->attacking ? "ATTACKING" : "NOT ATTACKING");
 	blackboard->SetValueAsInt("health", me->health);
+
+	FVector playerPos = UGameplayStatics::GetPlayerPawn(GetWorld(), 0)->GetActorLocation();
+	blackboard->SetValueAsVector("targetPos", playerPos);
 }

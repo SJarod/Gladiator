@@ -16,9 +16,11 @@ bool UBTDecorator_Attack::CalculateRawConditionValue(UBehaviorTreeComponent& Own
 	const AAIController* cont = OwnerComp.GetAIOwner();
 	if (const APlayerCharacter* npc = Cast<APlayerCharacter>(cont->GetPawn()))
 	{
-		return npc->attacking;
+		FVector playerPos = cont->GetBlackboardComponent()->GetValueAsVector("targetPos");
+		float distance = (playerPos - npc->GetActorLocation()).Size();
+
+		return distance <= cont->GetBlackboardComponent()->GetValueAsFloat(GetSelectedBlackboardKey());
 	}
 
-	int health = cont->GetBlackboardComponent()->GetValueAsInt(GetSelectedBlackboardKey());
-	return health == 5;
+	return false;
 }

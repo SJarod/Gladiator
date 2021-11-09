@@ -10,6 +10,8 @@
 #include "PlayerCharacter.h"
 #include "Kismet/GameplayStatics.h"
 
+#include "GameFramework/CharacterMovementComponent.h"
+
 UBlackboardComponent* ACustomAIController::getBB() const
 {
 	return blackboard;
@@ -32,10 +34,15 @@ ACustomAIController::ACustomAIController(const FObjectInitializer& ObjectInitial
 void ACustomAIController::BeginPlay()
 {
 	Super::BeginPlay();
+
+	APlayerCharacter* me = Cast<APlayerCharacter>(GetPawn());
+	me->GetCharacterMovement()->bOrientRotationToMovement = false; // Character does not move in the direction of input...	
+
 	RunBehaviorTree(btree);
 	behaviorTreeComponent->StartTree(*btree);
 
 	blackboard->SetValueAsVector("movement", FVector::ZeroVector);
+	blackboard->SetValueAsFloat("minRange", 100.f);
 }
 
 void ACustomAIController::Tick(float DeltaTime)

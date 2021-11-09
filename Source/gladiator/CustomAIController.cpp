@@ -36,13 +36,15 @@ void ACustomAIController::BeginPlay()
 	Super::BeginPlay();
 
 	APlayerCharacter* me = Cast<APlayerCharacter>(GetPawn());
-	me->GetCharacterMovement()->bOrientRotationToMovement = false; // Character does not move in the direction of input...	
+	me->GetCharacterMovement()->MaxWalkSpeed = 400.f;
 
 	RunBehaviorTree(btree);
 	behaviorTreeComponent->StartTree(*btree);
 
 	blackboard->SetValueAsVector("movement", FVector::ZeroVector);
+
 	blackboard->SetValueAsFloat("minRange", 100.f);
+	blackboard->SetValueAsFloat("acceptableRadius", 300.f);
 }
 
 void ACustomAIController::Tick(float DeltaTime)

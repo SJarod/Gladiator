@@ -80,6 +80,9 @@ public:
 	UFUNCTION()
 		void OnHammerBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
+	void TakeDamage();
+	bool IsBlocking();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

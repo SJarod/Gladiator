@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "PlayerCharacter.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
@@ -221,6 +222,33 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 void APlayerCharacter::OnHammerBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if(attacking)
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("HammerHit"));
+	APlayerCharacter* dwarfCast = Cast<APlayerCharacter>(OtherActor);
+	if (attacking)
+	{
+		FString colliderName = UKismetSystemLibrary::GetObjectName(OtherComp);
+		if (colliderName == "shield collider" && dwarfCast->IsBlocking())
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, colliderName);
+			attacking = false;
+			return;
+		}
+		else if (colliderName == "CollisionCylinder")
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, colliderName);
+			dwarfCast->TakeDamage();
+		}
+	}
+}
+void APlayerCharacter::TakeDamage()
+{
+	health -= 1;
+	if (health == 0)
+	{
+		dead = true;
+	}
+}
+
+bool APlayerCharacter::IsBlocking()
+{
+	return playBlock;
 }

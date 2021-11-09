@@ -13,9 +13,9 @@ class GLADIATOR_API APlayerCharacter : public ACharacter
 
 private:
 	UPROPERTY(VisibleAnywhere)
-	USkeletalMeshComponent* skhammer;
+	USkeletalMeshComponent*		skhammer;
 	UPROPERTY(VisibleAnywhere)
-	USkeletalMeshComponent* skshield;
+	USkeletalMeshComponent*		skshield;
 
 	UPROPERTY(VisibleAnywhere)
 	class UCapsuleComponent*	hammerCollider;
@@ -54,17 +54,6 @@ private:
 
 	void moveForward(float value);
 	void moveRight(float value);
-	void jump();
-	void viewZoom(float value);
-
-	void attack();
-	UFUNCTION()
-	void endAttack();
-
-	void block();
-	void unblock();
-
-	void takeDamage();
 
 public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
@@ -76,6 +65,22 @@ public:
 
 	// Sets default values for this character's properties
 	APlayerCharacter();
+
+	//movement animations
+	void playForward(float value);
+	void playRight(float value);
+
+	void jump();
+	void viewZoom(float value);
+
+	void attack();
+	UFUNCTION()
+	void endAttack();
+
+	void block();
+	void unblock();
+
+	void takeDamage();
 
 protected:
 	// Called when the game starts or when spawned

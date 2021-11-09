@@ -34,6 +34,8 @@ void ACustomAIController::BeginPlay()
 	Super::BeginPlay();
 	RunBehaviorTree(btree);
 	behaviorTreeComponent->StartTree(*btree);
+
+	blackboard->SetValueAsVector("movement", FVector::ZeroVector);
 }
 
 void ACustomAIController::Tick(float DeltaTime)

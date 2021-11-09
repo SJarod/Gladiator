@@ -17,7 +17,7 @@ void APlayerCharacter::moveForward(float value)
 	if (playAttack || playBlock)
 		return;
 
-	FBSpeed = value * speed;
+	playForward(value * speed);
 
 	if (!Controller || (value == 0.f))
 		return;
@@ -36,7 +36,7 @@ void APlayerCharacter::moveRight(float value)
 	if (playAttack || playBlock)
 		return;
 
-	LRSpeed = value * speed;
+	playRight(value * speed);
 
 	if (!Controller || (value == 0.f))
 		return;
@@ -48,6 +48,16 @@ void APlayerCharacter::moveRight(float value)
 	// get right vector 
 	const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 	AddMovementInput(Direction, value * speed);
+}
+
+void APlayerCharacter::playForward(float value)
+{
+	FBSpeed = value;
+}
+
+void APlayerCharacter::playRight(float value)
+{
+	LRSpeed = value;
 }
 
 void APlayerCharacter::jump()

@@ -3,7 +3,7 @@
 #include "BTTask_Attack.h"
 
 #include "AIController.h"
-#include "BehaviorTree/BlackboardComponent.h"
+#include "PlayerCharacter.h"
 
 UBTTask_Attack::UBTTask_Attack(const FObjectInitializer& ObjectInitializer)
 {
@@ -13,7 +13,8 @@ UBTTask_Attack::UBTTask_Attack(const FObjectInitializer& ObjectInitializer)
 EBTNodeResult::Type UBTTask_Attack::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
 	const AAIController* cont = OwnerComp.GetAIOwner();
+	APlayerCharacter* me = Cast<APlayerCharacter>(cont->GetPawn());
 
-	FString debug = cont->GetBlackboardComponent()->GetValueAsString(GetSelectedBlackboardKey());
+	me->attack();
 	return EBTNodeResult::Succeeded;
 }

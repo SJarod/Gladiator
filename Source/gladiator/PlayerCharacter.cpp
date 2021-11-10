@@ -135,9 +135,9 @@ APlayerCharacter::APlayerCharacter()
 	shieldCollider->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
 	shieldCollider->CanCharacterStepUpOn = ECB_No;
 	shieldCollider->SetCanEverAffectNavigation(false);
-	shieldCollider->SetRelativeLocation(FVector(0.f, 15.f, -5.f));
+	shieldCollider->SetRelativeLocation(FVector(0.f, 7.f, -5.f));
 	shieldCollider->SetWorldRotation(FRotator(0.f, 0.f, 0.f));
-	shieldCollider->SetWorldScale3D(FVector(1.f, 0.28f, 1.f));
+	shieldCollider->SetWorldScale3D(FVector(1.f, 0.1f, 1.f));
 
 	//set weapons meshes
 	skhammer = CreateDefaultSubobject<USkeletalMeshComponent>("hammer");

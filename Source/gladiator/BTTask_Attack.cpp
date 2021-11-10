@@ -4,6 +4,9 @@
 
 #include "AIController.h"
 #include "PlayerCharacter.h"
+#include "BehaviorTree/BlackboardComponent.h"
+
+#include "EnemyState.h"
 
 UBTTask_Attack::UBTTask_Attack(const FObjectInitializer& ObjectInitializer)
 {
@@ -12,9 +15,10 @@ UBTTask_Attack::UBTTask_Attack(const FObjectInitializer& ObjectInitializer)
 
 EBTNodeResult::Type UBTTask_Attack::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
-	const AAIController* cont = OwnerComp.GetAIOwner();
+	AAIController* cont = OwnerComp.GetAIOwner();
 	APlayerCharacter* me = Cast<APlayerCharacter>(cont->GetPawn());
 
 	me->Attack();
+	cont->GetBlackboardComponent()->SetValueAsEnum("state", (uint8)EnemyState::INPOSITION);
 	return EBTNodeResult::Succeeded;
 }

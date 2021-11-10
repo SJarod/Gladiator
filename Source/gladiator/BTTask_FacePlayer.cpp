@@ -17,7 +17,7 @@ EBTNodeResult::Type UBTTask_FacePlayer::ExecuteTask(UBehaviorTreeComponent& Owne
 	const AAIController* cont = OwnerComp.GetAIOwner();
 	APlayerCharacter* me = Cast<APlayerCharacter>(cont->GetPawn());
 
-	if (me->dead)
+	if (me->dead || me->playAttack || me->playBlock)
 		return EBTNodeResult::Failed;
 
 	FVector playerPos = cont->GetBlackboardComponent()->GetValueAsVector("targetPos");

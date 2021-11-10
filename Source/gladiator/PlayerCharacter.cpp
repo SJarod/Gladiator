@@ -116,11 +116,6 @@ void APlayerCharacter::Unblock()
 	playBlock = false;
 }
 
-bool APlayerCharacter::IsBlocking() const
-{
-	return playBlock;
-}
-
 void APlayerCharacter::TakeDamage()
 {
 	--health;
@@ -256,7 +251,7 @@ void APlayerCharacter::OnHammerBeginOverlap(UPrimitiveComponent* OverlappedComp,
 	if (attacking)
 	{
 		FString colliderName = UKismetSystemLibrary::GetObjectName(OtherComp);
-		if (colliderName == "shield collider" && dwarfCast->IsBlocking())
+		if (colliderName == "shield collider" && dwarfCast->playBlock)
 		{
 			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, colliderName);
 			attacking = false;

@@ -55,6 +55,8 @@ private:
 	void MoveForward(float value);
 	void MoveRight(float value);
 
+	void Die();
+
 public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	int  health = 5;

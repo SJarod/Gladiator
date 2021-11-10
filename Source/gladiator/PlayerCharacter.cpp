@@ -66,7 +66,7 @@ void APlayerCharacter::Jump()
 	if (!Controller || playAttack || playBlock)
 		return;
 
-	Jump();
+	ACharacter::Jump();
 }
 
 void APlayerCharacter::ViewZoom(float value)

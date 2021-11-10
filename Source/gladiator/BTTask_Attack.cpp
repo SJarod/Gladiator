@@ -15,6 +15,6 @@ EBTNodeResult::Type UBTTask_Attack::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 	const AAIController* cont = OwnerComp.GetAIOwner();
 	APlayerCharacter* me = Cast<APlayerCharacter>(cont->GetPawn());
 
-	me->attack();
+	me->Attack();
 	return EBTNodeResult::Succeeded;
 }

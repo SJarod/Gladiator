@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "PlayerCharacter.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
@@ -12,12 +13,12 @@
 
 #include "Components/TimelineComponent.h"
 
-void APlayerCharacter::moveForward(float value)
+void APlayerCharacter::MoveForward(float value)
 {
 	if (playAttack || playBlock)
 		return;
 
-	playForward(value * speed);
+	PlayForward(value * speed);
 
 	if (!Controller || (value == 0.f))
 		return;
@@ -31,12 +32,12 @@ void APlayerCharacter::moveForward(float value)
 	AddMovementInput(Direction, value * speed);
 }
 
-void APlayerCharacter::moveRight(float value)
+void APlayerCharacter::MoveRight(float value)
 {
 	if (playAttack || playBlock)
 		return;
 
-	playRight(value * speed);
+	PlayRight(value * speed);
 
 	if (!Controller || (value == 0.f))
 		return;
@@ -50,17 +51,17 @@ void APlayerCharacter::moveRight(float value)
 	AddMovementInput(Direction, value * speed);
 }
 
-void APlayerCharacter::playForward(float value)
+void APlayerCharacter::PlayForward(float value)
 {
 	FBSpeed = value;
 }
 
-void APlayerCharacter::playRight(float value)
+void APlayerCharacter::PlayRight(float value)
 {
 	LRSpeed = value;
 }
 
-void APlayerCharacter::jump()
+void APlayerCharacter::Jump()
 {
 	if (!Controller || playAttack || playBlock)
 		return;
@@ -68,12 +69,12 @@ void APlayerCharacter::jump()
 	Jump();
 }
 
-void APlayerCharacter::viewZoom(float value)
+void APlayerCharacter::ViewZoom(float value)
 {
 	cameraBoom->TargetArmLength += value * zoomSpeed;
 }
 
-void APlayerCharacter::attack()
+void APlayerCharacter::Attack()
 {
 	if (playBlock || playAttack || !Controller)
 		return;
@@ -81,26 +82,31 @@ void APlayerCharacter::attack()
 	playAttack = true;
 
 	GetWorldTimerManager().ClearTimer(timeHandle);
-	GetWorldTimerManager().SetTimer(timeHandle, this, &APlayerCharacter::endAttack, attackTimeRate, false);
+	GetWorldTimerManager().SetTimer(timeHandle, this, &APlayerCharacter::EndAttack, attackTimeRate, false);
 }
 
-void APlayerCharacter::endAttack()
+void APlayerCharacter::EndAttack()
 {
 	playAttack = false;
 }
 
-void APlayerCharacter::block()
+void APlayerCharacter::Block()
 {
-	endAttack();
+	EndAttack();
 	playBlock = true;
 }
 
-void APlayerCharacter::unblock()
+void APlayerCharacter::Unblock()
 {
 	playBlock = false;
 }
 
-void APlayerCharacter::takeDamage()
+bool APlayerCharacter::IsBlocking() const
+{
+	return playBlock;
+}
+
+void APlayerCharacter::TakeDamage()
 {
 	--health;
 
@@ -198,6 +204,9 @@ APlayerCharacter::APlayerCharacter()
 void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	hammerCollider->OnComponentBeginOverlap.AddDynamic(this, &APlayerCharacter::OnHammerBeginOverlap);
+
 	GetCharacterMovement()->JumpZVelocity = jumpForce;
 	GetCharacterMovement()->AirControl = airControl;
 
@@ -211,17 +220,37 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 	check(PlayerInputComponent);
 
-	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &APlayerCharacter::jump);
+	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &APlayerCharacter::Jump);
 
-	PlayerInputComponent->BindAxis("MoveForward", this, &APlayerCharacter::moveForward);
-	PlayerInputComponent->BindAxis("MoveRight", this, &APlayerCharacter::moveRight);
+	PlayerInputComponent->BindAxis("MoveForward", this, &APlayerCharacter::MoveForward);
+	PlayerInputComponent->BindAxis("MoveRight", this, &APlayerCharacter::MoveRight);
 
 	PlayerInputComponent->BindAxis("ViewYaw", this, &APawn::AddControllerYawInput);
 	PlayerInputComponent->BindAxis("ViewPitch", this, &APawn::AddControllerPitchInput);
 
-	PlayerInputComponent->BindAxis("ViewZoom", this, &APlayerCharacter::viewZoom);
+	PlayerInputComponent->BindAxis("ViewZoom", this, &APlayerCharacter::ViewZoom);
 
-	PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &APlayerCharacter::attack);
-	PlayerInputComponent->BindAction("Block", IE_Pressed, this, &APlayerCharacter::block);
-	PlayerInputComponent->BindAction("Block", IE_Released, this, &APlayerCharacter::unblock);
+	PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &APlayerCharacter::Attack);
+	PlayerInputComponent->BindAction("Block", IE_Pressed, this, &APlayerCharacter::Block);
+	PlayerInputComponent->BindAction("Block", IE_Released, this, &APlayerCharacter::Unblock);
+}
+
+void APlayerCharacter::OnHammerBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	APlayerCharacter* dwarfCast = Cast<APlayerCharacter>(OtherActor);
+	if (attacking)
+	{
+		FString colliderName = UKismetSystemLibrary::GetObjectName(OtherComp);
+		if (colliderName == "shield collider" && dwarfCast->IsBlocking())
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, colliderName);
+			attacking = false;
+			return;
+		}
+		else if (colliderName == "CollisionCylinder")
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, colliderName);
+			dwarfCast->TakeDamage();
+		}
+	}
 }

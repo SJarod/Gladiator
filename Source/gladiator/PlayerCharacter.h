@@ -52,8 +52,8 @@ private:
 	UPROPERTY(EditAnywhere)
 	float attackTimeRate = 0.5f;
 
-	void moveForward(float value);
-	void moveRight(float value);
+	void MoveForward(float value);
+	void MoveRight(float value);
 
 public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
@@ -67,20 +67,24 @@ public:
 	APlayerCharacter();
 
 	//movement animations
-	void playForward(float value);
-	void playRight(float value);
+	void PlayForward(float value);
+	void PlayRight(float value);
 
-	void jump();
-	void viewZoom(float value);
+	void Jump();
+	void ViewZoom(float value);
 
-	void attack();
+	void Attack();
 	UFUNCTION()
-	void endAttack();
+	void EndAttack();
 
-	void block();
-	void unblock();
+	void Block();
+	void Unblock();
+	bool IsBlocking() const;
 
-	void takeDamage();
+	void TakeDamage();
+
+	UFUNCTION()
+	void OnHammerBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 protected:
 	// Called when the game starts or when spawned

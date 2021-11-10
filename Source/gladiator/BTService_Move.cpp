@@ -20,8 +20,8 @@ void UBTService_Move::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMem
 		if (worldSpeed.Size() == 0.f)
 		{
 			cont->GetBlackboardComponent()->SetValueAsVector(GetSelectedBlackboardKey(), FVector::ZeroVector);
-			npc->playForward(0.f);
-			npc->playRight(0.f);
+			npc->PlayForward(0.f);
+			npc->PlayRight(0.f);
 			return;
 		}
 
@@ -36,7 +36,7 @@ void UBTService_Move::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMem
 		FVector localSpeed = { xSpeed, ySpeed, 0.f };
 		cont->GetBlackboardComponent()->SetValueAsVector(GetSelectedBlackboardKey(), localSpeed);
 
-		npc->playForward(xSpeed);
-		npc->playRight(ySpeed);
+		npc->PlayForward(xSpeed);
+		npc->PlayRight(ySpeed);
 	}
 }

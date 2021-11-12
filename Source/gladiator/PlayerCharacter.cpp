@@ -15,7 +15,7 @@
 
 void APlayerCharacter::MoveForward(float value)
 {
-	if (playAttack || playBlock)
+	if (dead || playAttack || playBlock)
 		return;
 
 	PlayForward(value * speed);
@@ -34,7 +34,7 @@ void APlayerCharacter::MoveForward(float value)
 
 void APlayerCharacter::MoveRight(float value)
 {
-	if (playAttack || playBlock)
+	if (dead || playAttack || playBlock)
 		return;
 
 	PlayRight(value * speed);
@@ -51,6 +51,18 @@ void APlayerCharacter::MoveRight(float value)
 	AddMovementInput(Direction, value * speed);
 }
 
+void APlayerCharacter::Die()
+{
+	dead = true;
+
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	hammerCollider->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	shieldCollider->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	//APlayerController* PlayerController = Cast<APlayerController>(GetController());
+	//DisableInput(PlayerController);
+}
+
 void APlayerCharacter::PlayForward(float value)
 {
 	FBSpeed = value;
@@ -63,7 +75,7 @@ void APlayerCharacter::PlayRight(float value)
 
 void APlayerCharacter::Jump()
 {
-	if (!Controller || playAttack || playBlock)
+	if (dead || !Controller || playAttack || playBlock)
 		return;
 
 	ACharacter::Jump();
@@ -76,7 +88,7 @@ void APlayerCharacter::ViewZoom(float value)
 
 void APlayerCharacter::Attack()
 {
-	if (playBlock || playAttack || !Controller)
+	if (dead || playBlock || playAttack || !Controller)
 		return;
 
 	playAttack = true;
@@ -92,6 +104,9 @@ void APlayerCharacter::EndAttack()
 
 void APlayerCharacter::Block()
 {
+	if (dead)
+		return;
+
 	EndAttack();
 	playBlock = true;
 }
@@ -101,17 +116,12 @@ void APlayerCharacter::Unblock()
 	playBlock = false;
 }
 
-bool APlayerCharacter::IsBlocking() const
-{
-	return playBlock;
-}
-
 void APlayerCharacter::TakeDamage()
 {
 	--health;
 
 	if (health <= 0)
-		dead = true;
+		Die();
 }
 
 // Sets default values
@@ -241,7 +251,7 @@ void APlayerCharacter::OnHammerBeginOverlap(UPrimitiveComponent* OverlappedComp,
 	if (attacking)
 	{
 		FString colliderName = UKismetSystemLibrary::GetObjectName(OtherComp);
-		if (colliderName == "shield collider" && dwarfCast->IsBlocking())
+		if (colliderName == "shield collider" && dwarfCast->playBlock)
 		{
 			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, colliderName);
 			attacking = false;

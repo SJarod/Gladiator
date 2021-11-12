@@ -12,6 +12,8 @@
 
 #include "GameFramework/CharacterMovementComponent.h"
 
+#include "EnemyState.h"
+
 UBlackboardComponent* ACustomAIController::getBB() const
 {
 	return blackboard;
@@ -43,8 +45,10 @@ void ACustomAIController::BeginPlay()
 
 	blackboard->SetValueAsVector("movement", FVector::ZeroVector);
 
-	blackboard->SetValueAsFloat("minRange", 100.f);
+	blackboard->SetValueAsFloat("attackRange", 75.f);
 	blackboard->SetValueAsFloat("acceptableRadius", 300.f);
+
+	blackboard->SetValueAsEnum("state", (uint8)EnemyState::INFIGHT);
 }
 
 void ACustomAIController::Tick(float DeltaTime)
@@ -57,4 +61,9 @@ void ACustomAIController::Tick(float DeltaTime)
 
 	FVector playerPos = UGameplayStatics::GetPlayerPawn(GetWorld(), 0)->GetActorLocation();
 	blackboard->SetValueAsVector("targetPos", playerPos);
+
+	FVector dirPlayerToMe = me->GetActorLocation() - playerPos;
+	dirPlayerToMe.Normalize();
+	FVector safePos = playerPos + dirPlayerToMe * blackboard->GetValueAsFloat("acceptableRadius");
+	blackboard->SetValueAsVector("safePos", safePos);
 }

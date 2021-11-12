@@ -8,7 +8,7 @@
 
 UBTService_Move::UBTService_Move(const FObjectInitializer& ObjectInitializer)
 {
-	NodeName = TEXT("Update Blackboard Speed");
+	NodeName = TEXT("Update Animation Speed");
 }
 
 void UBTService_Move::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)

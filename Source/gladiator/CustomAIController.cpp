@@ -14,6 +14,8 @@
 
 #include "EnemyState.h"
 
+#include "DrawDebugHelpers.h"
+
 UBlackboardComponent* ACustomAIController::getBB() const
 {
 	return blackboard;
@@ -66,4 +68,6 @@ void ACustomAIController::Tick(float DeltaTime)
 	dirPlayerToMe.Normalize();
 	FVector safePos = playerPos + dirPlayerToMe * blackboard->GetValueAsFloat("acceptableRadius");
 	blackboard->SetValueAsVector("safePos", safePos);
+
+	DrawDebugSphere(GetWorld(), safePos, 30.f, 16, FColor::Green, false, 0.1f);
 }

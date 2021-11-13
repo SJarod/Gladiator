@@ -25,11 +25,12 @@ void UBTService_SafePos::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* Node
 		const FVector rightDir = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 
 		//beta is a vector that will be added to alpha to make a new position
-		FVector beta = rightDir/* * (rand() % 2 - 1)*/;
-		beta *= 100.f;
+		int dir = rand() % 3 - 1;
+		FVector beta = rightDir * dir;
+		beta *= 250.f;
 
 		cont->GetBlackboardComponent()->SetValueAsVector(GetSelectedBlackboardKey(), alpha + beta);
 
-		DrawDebugSphere(GetWorld(), alpha + beta, 30.f, 16, FColor::Red, false, 0.1f);
+		//DrawDebugSphere(GetWorld(), alpha + beta, 30.f, 16, FColor::Red, false, 0.1f);
 	}
 }

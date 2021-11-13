@@ -69,5 +69,5 @@ void ACustomAIController::Tick(float DeltaTime)
 	FVector safePos = playerPos + dirPlayerToMe * blackboard->GetValueAsFloat("acceptableRadius");
 	blackboard->SetValueAsVector("safePos", safePos);
 
-	DrawDebugSphere(GetWorld(), safePos, 30.f, 16, FColor::Green, false, 0.1f);
+	//DrawDebugSphere(GetWorld(), safePos, 30.f, 16, FColor::Green, false, 0.1f);
 }

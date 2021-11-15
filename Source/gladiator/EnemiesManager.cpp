@@ -1,5 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
+#include "EnemiesManager.h"
 
 #include "Kismet/GameplayStatics.h"
 #include "Math/UnrealMathUtility.h"
@@ -7,14 +8,11 @@
 #include "BehaviorTree/BlackboardComponent.h"
 #include "EnemyState.h"
 
-#include "EnemiesManager.h"
-
 // Sets default values
 AEnemiesManager::AEnemiesManager()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
 }
 
 // Called when the game starts or when spawned
@@ -41,7 +39,6 @@ void AEnemiesManager::Tick(float DeltaTime)
 		timeBetweenAttacks = maxTimeBetweenAttacks;
 		EnemyAttack();
 	}
-
 }
 
 void AEnemiesManager::EnemyAttack()
@@ -52,4 +49,3 @@ void AEnemiesManager::EnemyAttack()
 
 	blackboardComponent->SetValueAsEnum("state", (uint8)EnemyState::INFIGHT);
 }
-

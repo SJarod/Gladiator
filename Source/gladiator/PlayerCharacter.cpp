@@ -138,6 +138,8 @@ void APlayerCharacter::Unblock()
 void APlayerCharacter::TakeDamage()
 {
 	--health;
+	healthPerCent = (float)health / (float)maxHealth;
+	OnHealthUpdate.Broadcast();
 
 	setMtlBlink(true);
 

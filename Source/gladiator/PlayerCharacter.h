@@ -6,6 +6,8 @@
 #include "GameFramework/Character.h"
 #include "PlayerCharacter.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FHealthEvent);
+
 UCLASS()
 class GLADIATOR_API APlayerCharacter : public ACharacter
 {
@@ -64,11 +66,16 @@ public:
 	bool  playBlock = false;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	int  health = 5;
+	int   health = 5;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	bool dead = false;
+	float healthPerCent = 1.f;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	bool  dead = false;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	bool attacking = false;
+	bool  attacking = false;
+
+	UPROPERTY(BlueprintAssignable, Category = "Event")
+	FHealthEvent OnHealthUpdate;
 
 	// Sets default values for this character's properties
 	APlayerCharacter();

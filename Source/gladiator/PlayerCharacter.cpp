@@ -11,8 +11,6 @@
 #include "Components/CapsuleComponent.h"
 #include "Components/BoxComponent.h"
 
-#include "Components/TimelineComponent.h"
-
 void APlayerCharacter::MoveForward(float value)
 {
 	if (dead || playAttack || playBlock)

@@ -42,6 +42,8 @@ private:
 	UPROPERTY(EditAnywhere)
 	float attackTimeRate = 0.5f;
 
+	APlayerCharacter* target;
+
 	void MoveForward(float value);
 	void MoveRight(float value);
 
@@ -94,4 +96,8 @@ protected:
 public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+		bool canSeeTarget = false;
+	void UpdateSeeTarget();
 };

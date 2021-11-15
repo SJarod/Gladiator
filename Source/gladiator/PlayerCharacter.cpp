@@ -2,11 +2,13 @@
 
 #include "PlayerCharacter.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "Kismet/GameplayStatics.h"
 
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 
 #include "GameFramework/CharacterMovementComponent.h"
+#include "GameFramework/Controller.h"
 
 #include "Components/CapsuleComponent.h"
 #include "Components/BoxComponent.h"
@@ -143,7 +145,7 @@ APlayerCharacter::APlayerCharacter()
 	shieldCollider->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
 	shieldCollider->CanCharacterStepUpOn = ECB_No;
 	shieldCollider->SetCanEverAffectNavigation(false);
-	shieldCollider->SetRelativeLocation(FVector(0.f, 7.f, -5.f));
+	shieldCollider->SetRelativeLocation(FVector(0.f, 9.f, -5.f));
 	shieldCollider->SetWorldRotation(FRotator(0.f, 0.f, 0.f));
 	shieldCollider->SetWorldScale3D(FVector(1.f, 0.1f, 1.f));
 
@@ -213,6 +215,11 @@ void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
+	TArray<AActor*> tempList;
+	UGameplayStatics::GetAllActorsOfClassWithTag(GetWorld(), APlayerCharacter::StaticClass(), TEXT("Player"), tempList);
+	if (tempList.Num() > 0)
+		target = Cast<APlayerCharacter>(tempList[0]);
+
 	hammerCollider->OnComponentBeginOverlap.AddDynamic(this, &APlayerCharacter::OnHammerBeginOverlap);
 
 	GetCharacterMovement()->JumpZVelocity = jumpForce;
@@ -253,7 +260,6 @@ void APlayerCharacter::OnHammerBeginOverlap(UPrimitiveComponent* OverlappedComp,
 		{
 			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, colliderName);
 			attacking = false;
-			return;
 		}
 		else if (colliderName == "CollisionCylinder")
 		{
@@ -261,4 +267,9 @@ void APlayerCharacter::OnHammerBeginOverlap(UPrimitiveComponent* OverlappedComp,
 			dwarfCast->TakeDamage();
 		}
 	}
+}
+
+void APlayerCharacter::UpdateSeeTarget()
+{
+	GetController()->LineOfSightTo(Cast<AActor>(target), (FVector)(ForceInit), canSeeTarget);
 }

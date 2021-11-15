@@ -11,6 +11,8 @@
 #include "Components/CapsuleComponent.h"
 #include "Components/BoxComponent.h"
 
+#include "Kismet/GameplayStatics.h"
+
 void APlayerCharacter::MoveForward(float value)
 {
 	if (dead || playAttack || playBlock)
@@ -47,6 +49,25 @@ void APlayerCharacter::MoveRight(float value)
 	// get right vector 
 	const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 	AddMovementInput(Direction, value * speed);
+}
+
+void APlayerCharacter::setMtlBlink(bool activate)
+{
+	if (activate)
+	{
+		float curTime = UGameplayStatics::GetRealTimeSeconds(GetWorld());
+		GetMesh()->SetScalarParameterValueOnMaterials("Activate", 1.f);
+		GetMesh()->SetScalarParameterValueOnMaterials("StartTime", curTime);
+	}
+	else
+	{
+		GetMesh()->SetScalarParameterValueOnMaterials("Activate", 0.f);
+	}
+}
+
+void APlayerCharacter::setMtlBlinkFalse()
+{
+	setMtlBlink(false);
 }
 
 void APlayerCharacter::Die()
@@ -117,6 +138,11 @@ void APlayerCharacter::Unblock()
 void APlayerCharacter::TakeDamage()
 {
 	--health;
+
+	setMtlBlink(true);
+
+	GetWorldTimerManager().ClearTimer(timeHandle);
+	GetWorldTimerManager().SetTimer(timeHandle, this, &APlayerCharacter::setMtlBlinkFalse, dmgBlinkTimeRate, false);
 
 	if (health <= 0)
 		Die();

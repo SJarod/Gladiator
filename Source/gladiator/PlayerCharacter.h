@@ -42,7 +42,7 @@ private:
 	UPROPERTY(EditAnywhere)
 	float attackTimeRate = 0.5f;
 	UPROPERTY(EditAnywhere)
-	float dmgBlinkTimeRate = 3.f;
+	float dmgBlinkTimeRate = 1.f;
 
 	void MoveForward(float value);
 	void MoveRight(float value);

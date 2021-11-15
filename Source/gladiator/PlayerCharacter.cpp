@@ -141,8 +141,11 @@ void APlayerCharacter::TakeDamage()
 
 	setMtlBlink(true);
 
-	GetWorldTimerManager().ClearTimer(timeHandle);
-	GetWorldTimerManager().SetTimer(timeHandle, this, &APlayerCharacter::setMtlBlinkFalse, dmgBlinkTimeRate, false);
+	if (health != 1)
+	{
+		GetWorldTimerManager().ClearTimer(timeHandle);
+		GetWorldTimerManager().SetTimer(timeHandle, this, &APlayerCharacter::setMtlBlinkFalse, dmgBlinkTimeRate, false);
+	}
 
 	if (health <= 0)
 		Die();

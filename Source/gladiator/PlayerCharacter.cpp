@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "PlayerCharacter.h"
+#include "Blueprint/AIBlueprintHelperLibrary.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -59,8 +60,11 @@ void APlayerCharacter::Die()
 	hammerCollider->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	shieldCollider->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
-	//APlayerController* PlayerController = Cast<APlayerController>(GetController());
-	//DisableInput(PlayerController);
+	AAIController* AIController = GetAIController();
+
+	if (AIController)
+	{
+	}
 }
 
 void APlayerCharacter::PlayForward(float value)

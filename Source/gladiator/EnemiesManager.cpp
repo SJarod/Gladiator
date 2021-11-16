@@ -15,7 +15,6 @@ AEnemiesManager::AEnemiesManager()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
 }
 
 // Called when the game starts or when spawned
@@ -44,7 +43,7 @@ void AEnemiesManager::Tick(float DeltaTime)
 		timeBetweenAttacks = maxTimeBetweenAttacks;
 		EnemyAttack();
 	}
-	
+
 	for (APlayerCharacter* enemy : enemies)
 	{
 
@@ -66,4 +65,3 @@ void AEnemiesManager::EnemyAttack()
 
 	blackboardComponent->SetValueAsEnum("state", (uint8)EnemyState::INFIGHT);
 }
-

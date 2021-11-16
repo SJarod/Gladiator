@@ -50,7 +50,7 @@ void ACustomAIController::BeginPlay()
 	blackboard->SetValueAsFloat("attackRange", 75.f);
 	blackboard->SetValueAsFloat("acceptableRadius", 300.f);
 
-	blackboard->SetValueAsEnum("state", (uint8)EnemyState::INFIGHT);
+	blackboard->SetValueAsEnum("state", (uint8)EnemyState::INPATROL);
 }
 
 void ACustomAIController::Tick(float DeltaTime)

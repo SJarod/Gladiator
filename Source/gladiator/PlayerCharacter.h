@@ -6,6 +6,8 @@
 #include "GameFramework/Character.h"
 #include "PlayerCharacter.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FHealthEvent);
+
 UCLASS()
 class GLADIATOR_API APlayerCharacter : public ACharacter
 {
@@ -38,14 +40,21 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* camera;
 
-	FTimerHandle timeHandle;
+	//time handles for timers
+	FTimerHandle attackTimer;
+	FTimerHandle dmgTimer;
 	UPROPERTY(EditAnywhere)
 	float attackTimeRate = 0.5f;
+	UPROPERTY(EditAnywhere)
+	float dmgBlinkTimeRate = 1.f;
 
 	APlayerCharacter* target;
 
 	void MoveForward(float value);
 	void MoveRight(float value);
+
+	void setMtlBlink(bool activate);
+	void setMtlBlinkFalse();
 
 	void Die();
 
@@ -61,11 +70,16 @@ public:
 	bool  playBlock = false;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	int  health = 5;
+	int   health = 5;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	bool dead = false;
+	float healthPerCent = 1.f;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	bool  dead = false;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	bool attacking = false;
+	bool  attacking = false;
+
+	UPROPERTY(BlueprintAssignable, Category = "Event")
+	FHealthEvent OnHealthUpdate;
 
 	// Sets default values for this character's properties
 	APlayerCharacter();

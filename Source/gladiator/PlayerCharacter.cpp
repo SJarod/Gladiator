@@ -13,6 +13,8 @@
 #include "Components/CapsuleComponent.h"
 #include "Components/BoxComponent.h"
 
+#include "Kismet/GameplayStatics.h"
+
 void APlayerCharacter::MoveForward(float value)
 {
 	if (dead || playAttack || playBlock)
@@ -49,6 +51,26 @@ void APlayerCharacter::MoveRight(float value)
 	// get right vector 
 	const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 	AddMovementInput(Direction, value * speed);
+}
+
+void APlayerCharacter::setMtlBlink(bool activate)
+{
+	if (activate)
+	{
+		float curTime = UGameplayStatics::GetRealTimeSeconds(GetWorld());
+		GetMesh()->SetScalarParameterValueOnMaterials("Activate", 1.f);
+		GetMesh()->SetScalarParameterValueOnMaterials("StartTime", curTime);
+	}
+	else
+	{
+		GetMesh()->SetScalarParameterValueOnMaterials("Activate", 0.f);
+	}
+}
+
+void APlayerCharacter::setMtlBlinkFalse()
+{
+	if (health != 1)
+		setMtlBlink(false);
 }
 
 void APlayerCharacter::Die()
@@ -90,8 +112,8 @@ void APlayerCharacter::Attack()
 
 	playAttack = true;
 
-	GetWorldTimerManager().ClearTimer(timeHandle);
-	GetWorldTimerManager().SetTimer(timeHandle, this, &APlayerCharacter::EndAttack, attackTimeRate, false);
+	GetWorldTimerManager().ClearTimer(attackTimer);
+	GetWorldTimerManager().SetTimer(attackTimer, this, &APlayerCharacter::EndAttack, attackTimeRate, false);
 }
 
 void APlayerCharacter::EndAttack()
@@ -116,6 +138,13 @@ void APlayerCharacter::Unblock()
 void APlayerCharacter::TakeDamage()
 {
 	--health;
+	healthPerCent = (float)health / (float)maxHealth;
+	OnHealthUpdate.Broadcast();
+
+	setMtlBlink(true);
+
+	GetWorldTimerManager().ClearTimer(dmgTimer);
+	GetWorldTimerManager().SetTimer(dmgTimer, this, &APlayerCharacter::setMtlBlinkFalse, dmgBlinkTimeRate, false);
 
 	if (health <= 0)
 		Die();
@@ -255,12 +284,10 @@ void APlayerCharacter::OnHammerBeginOverlap(UPrimitiveComponent* OverlappedComp,
 		FString colliderName = UKismetSystemLibrary::GetObjectName(OtherComp);
 		if (colliderName == "shield collider" && dwarfCast->playBlock)
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, colliderName);
 			attacking = false;
 		}
 		else if (colliderName == "CollisionCylinder" && Tags[0] != OtherActor->Tags[0])
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, colliderName);
 			dwarfCast->TakeDamage();
 		}
 	}

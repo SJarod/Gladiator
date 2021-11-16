@@ -1,13 +1,14 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
+#include "EnemiesManager.h"
+
 #include "Kismet/GameplayStatics.h"
 #include "Math/UnrealMathUtility.h"
 #include "Blueprint/AIBlueprintHelperLibrary.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "EnemyState.h"
 
-#include "EnemiesManager.h"
 
 // Sets default values
 AEnemiesManager::AEnemiesManager()

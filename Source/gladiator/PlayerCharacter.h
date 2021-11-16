@@ -40,7 +40,9 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* camera;
 
-	FTimerHandle timeHandle;
+	//time handles for timers
+	FTimerHandle attackTimer;
+	FTimerHandle dmgTimer;
 	UPROPERTY(EditAnywhere)
 	float attackTimeRate = 0.5f;
 	UPROPERTY(EditAnywhere)

@@ -115,8 +115,8 @@ void APlayerCharacter::Attack()
 
 	playAttack = true;
 
-	GetWorldTimerManager().ClearTimer(timeHandle);
-	GetWorldTimerManager().SetTimer(timeHandle, this, &APlayerCharacter::EndAttack, attackTimeRate, false);
+	GetWorldTimerManager().ClearTimer(attackTimer);
+	GetWorldTimerManager().SetTimer(attackTimer, this, &APlayerCharacter::EndAttack, attackTimeRate, false);
 }
 
 void APlayerCharacter::EndAttack()
@@ -146,8 +146,8 @@ void APlayerCharacter::TakeDamage()
 
 	setMtlBlink(true);
 
-	GetWorldTimerManager().ClearTimer(timeHandle);
-	GetWorldTimerManager().SetTimer(timeHandle, this, &APlayerCharacter::setMtlBlinkFalse, dmgBlinkTimeRate, false);
+	GetWorldTimerManager().ClearTimer(dmgTimer);
+	GetWorldTimerManager().SetTimer(dmgTimer, this, &APlayerCharacter::setMtlBlinkFalse, dmgBlinkTimeRate, false);
 
 	if (health <= 0)
 		Die();

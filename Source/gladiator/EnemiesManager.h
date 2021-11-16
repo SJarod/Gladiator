@@ -34,4 +34,7 @@ private:
 		TArray<APlayerCharacter*> enemies;
 
 	void EnemyAttack();
+
+	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		bool gameOver = false;
 };

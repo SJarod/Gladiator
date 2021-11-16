@@ -32,6 +32,8 @@ void AEnemiesManager::BeginPlay()
 // Called every frame
 void AEnemiesManager::Tick(float DeltaTime)
 {
+	bool allEnemiesdead = true;
+
 	Super::Tick(DeltaTime);
 	timeBetweenAttacks -= DeltaTime;
 	if (timeBetweenAttacks <= 0)
@@ -39,6 +41,17 @@ void AEnemiesManager::Tick(float DeltaTime)
 		timeBetweenAttacks = maxTimeBetweenAttacks;
 		EnemyAttack();
 	}
+
+	for (APlayerCharacter* enemy : enemies)
+	{
+
+		enemy->UpdateSeeTarget();
+
+		if (!enemy->dead)
+			allEnemiesdead = false;
+	}
+	if(allEnemiesdead)
+		gameOver = true;
 }
 
 void AEnemiesManager::EnemyAttack()

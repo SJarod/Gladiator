@@ -284,12 +284,10 @@ void APlayerCharacter::OnHammerBeginOverlap(UPrimitiveComponent* OverlappedComp,
 		FString colliderName = UKismetSystemLibrary::GetObjectName(OtherComp);
 		if (colliderName == "shield collider" && dwarfCast->playBlock)
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, colliderName);
 			attacking = false;
 		}
 		else if (colliderName == "CollisionCylinder" && Tags[0] != OtherActor->Tags[0])
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, colliderName);
 			dwarfCast->TakeDamage();
 		}
 	}

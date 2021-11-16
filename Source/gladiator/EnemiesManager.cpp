@@ -50,6 +50,7 @@ void AEnemiesManager::Tick(float DeltaTime)
 		if (!enemy->dead)
 			allEnemiesdead = false;
 	}
+
 	if(allEnemiesdead)
 		gameOver = true;
 }

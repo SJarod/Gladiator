@@ -225,7 +225,7 @@ APlayerCharacter::APlayerCharacter()
 	cameraBoom = CreateDefaultSubobject<USpringArmComponent>("spring arm");
 	cameraBoom->SetupAttachment(RootComponent);
 	cameraBoom->bUsePawnControlRotation = true; // Rotate the arm based on the controller
-	cameraBoom->ProbeChannel = ECC_Visibility;
+	cameraBoom->ProbeChannel = ECC_Camera;
 
 	camera = CreateDefaultSubobject<UCameraComponent>("camera");
 	camera->SetupAttachment(cameraBoom, USpringArmComponent::SocketName);
@@ -315,6 +315,5 @@ void APlayerCharacter::OnSeePawn(APawn* OtherPawn)
 
 void APlayerCharacter::UpdateSeeTarget()
 {
-	//GetController()->LineOfSightTo(Cast<AActor>(target), (FVector)(ForceInit), canSeeTarget);
-	GetController()->LineOfSightTo(Cast<AActor>(target), GetActorLocation(), canSeeTarget);
+	canSeeTarget = GetController()->LineOfSightTo(Cast<APlayerCharacter>(target), GetActorLocation());
 }

@@ -230,8 +230,8 @@ APlayerCharacter::APlayerCharacter()
 	camera->SetActive(true);
 	camera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
-	static ConstructorHelpers::FObjectFinder<UAnimBlueprint> animbp(TEXT("/Game/Characters/DwarfGrunt/Blueprint/PlayerDwarfAnimationBP.PlayerDwarfAnimationBP"));
-	GetMesh()->SetAnimInstanceClass(animbp.Object->GeneratedClass);
+	//static ConstructorHelpers::FObjectFinder<UAnimBlueprint> animbp(TEXT("/Game/Characters/DwarfGrunt/Blueprint/PlayerDwarfAnimationBP.PlayerDwarfAnimationBP"));
+	//GetMesh()->SetAnimInstanceClass(animbp.Object->GeneratedClass);
 
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
 }
@@ -297,5 +297,6 @@ void APlayerCharacter::OnHammerBeginOverlap(UPrimitiveComponent* OverlappedComp,
 
 void APlayerCharacter::UpdateSeeTarget()
 {
-	GetController()->LineOfSightTo(Cast<AActor>(target), (FVector)(ForceInit), canSeeTarget);
+	//GetController()->LineOfSightTo(Cast<AActor>(target), (FVector)(ForceInit), canSeeTarget);
+	GetController()->LineOfSightTo(Cast<AActor>(target), GetActorLocation(), canSeeTarget);
 }

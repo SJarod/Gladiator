@@ -15,6 +15,8 @@
 
 #include "Kismet/GameplayStatics.h"
 
+#include "Perception/PawnSensingComponent.h"
+
 void APlayerCharacter::MoveForward(float value)
 {
 	if (dead || playAttack || playBlock)
@@ -230,10 +232,23 @@ APlayerCharacter::APlayerCharacter()
 	camera->SetActive(true);
 	camera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
+	pawnSensor = CreateDefaultSubobject<UPawnSensingComponent>("pawn sensor");
+	pawnSensor->HearingThreshold = 0.f;
+	pawnSensor->LOSHearingThreshold = 0.f;
+	pawnSensor->SightRadius = 1000.f;
+	pawnSensor->SensingInterval = 0.5f;
+	pawnSensor->SetPeripheralVisionAngle(45.f);
+
 	//static ConstructorHelpers::FObjectFinder<UAnimBlueprint> animbp(TEXT("/Game/Characters/DwarfGrunt/Blueprint/PlayerDwarfAnimationBP.PlayerDwarfAnimationBP"));
 	//GetMesh()->SetAnimInstanceClass(animbp.Object->GeneratedClass);
 
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
+}
+
+void APlayerCharacter::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+	pawnSensor->OnSeePawn.AddDynamic(this, &APlayerCharacter::OnSeePawn);
 }
 
 // Called when the game starts or when spawned
@@ -291,6 +306,11 @@ void APlayerCharacter::OnHammerBeginOverlap(UPrimitiveComponent* OverlappedComp,
 			dwarfCast->TakeDamage();
 		}
 	}
+}
+
+void APlayerCharacter::OnSeePawn(APawn* OtherPawn)
+{
+	pawnSensorFoundPlayer = true;
 }
 
 void APlayerCharacter::UpdateSeeTarget()

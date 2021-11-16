@@ -1,6 +1,5 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "EnemiesManager.h"
 
 #include "Kismet/GameplayStatics.h"
@@ -9,6 +8,7 @@
 #include "BehaviorTree/BlackboardComponent.h"
 #include "EnemyState.h"
 
+#include <vector>
 
 // Sets default values
 AEnemiesManager::AEnemiesManager()
@@ -46,7 +46,6 @@ void AEnemiesManager::Tick(float DeltaTime)
 
 	for (APlayerCharacter* enemy : enemies)
 	{
-
 		enemy->UpdateSeeTarget();
 
 		if (!enemy->dead)
@@ -59,9 +58,26 @@ void AEnemiesManager::Tick(float DeltaTime)
 
 void AEnemiesManager::EnemyAttack()
 {
-	APlayerCharacter* enemy = enemies[FMath::RandRange(0, enemies.Num() - 1)];
+	//check which enemy is INPOSITION (ready to fight)
+	int index = 0;
+	std::vector<int> validIndexes;
+	for (APlayerCharacter* enemy : enemies)
+	{
+		UBlackboardComponent* bb = UAIBlueprintHelperLibrary::GetBlackboard(enemy);
+		uint8 state = bb->GetValueAsEnum("state");
+
+		if (state == (uint8)EnemyState::INPOSITION)
+			validIndexes.push_back(index);
+
+		++index;
+	}
+
+	if ((int)validIndexes.size() == 0)
+		return;
+
+	int randIndex = validIndexes[FMath::RandRange(0, (int)validIndexes.size() - 1)];
+	APlayerCharacter* enemy = enemies[randIndex];
 
 	UBlackboardComponent* blackboardComponent = UAIBlueprintHelperLibrary::GetBlackboard(enemy);
-
 	blackboardComponent->SetValueAsEnum("state", (uint8)EnemyState::INFIGHT);
 }

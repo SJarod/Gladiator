@@ -40,6 +40,9 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* camera;
 
+	UPROPERTY(VisibleAnyWhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	class UPawnSensingComponent* pawnSensor;
+
 	//time handles for timers
 	FTimerHandle attackTimer;
 	FTimerHandle dmgTimer;
@@ -77,12 +80,16 @@ public:
 	bool  dead = false;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	bool  attacking = false;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	bool  pawnSensorFoundPlayer = false;
 
 	UPROPERTY(BlueprintAssignable, Category = "Event")
 	FHealthEvent OnHealthUpdate;
 
 	// Sets default values for this character's properties
 	APlayerCharacter();
+
+	virtual void PostInitializeComponents() override;
 
 	//movement animations
 	void PlayForward(float value);
@@ -103,6 +110,9 @@ public:
 	UFUNCTION()
 	void OnHammerBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
+	UFUNCTION()
+	void OnSeePawn(APawn* OtherPawn);
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -112,6 +122,6 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-		bool canSeeTarget = false;
+	bool canSeeTarget = false;
 	void UpdateSeeTarget();
 };

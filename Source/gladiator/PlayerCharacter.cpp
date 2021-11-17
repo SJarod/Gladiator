@@ -71,7 +71,8 @@ void APlayerCharacter::setMtlBlink(bool activate)
 
 void APlayerCharacter::setMtlBlinkFalse()
 {
-	if (health != 1)
+	//blink continueously if low health
+	//if (health != 1)
 		setMtlBlink(false);
 }
 
@@ -237,7 +238,7 @@ APlayerCharacter::APlayerCharacter()
 	pawnSensor->LOSHearingThreshold = 0.f;
 	pawnSensor->SightRadius = 1000.f;
 	pawnSensor->SensingInterval = 0.5f;
-	pawnSensor->SetPeripheralVisionAngle(45.f);
+	pawnSensor->SetPeripheralVisionAngle(60.f);
 
 	//static ConstructorHelpers::FObjectFinder<UAnimBlueprint> animbp(TEXT("/Game/Characters/DwarfGrunt/Blueprint/PlayerDwarfAnimationBP.PlayerDwarfAnimationBP"));
 	//GetMesh()->SetAnimInstanceClass(animbp.Object->GeneratedClass);

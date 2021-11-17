@@ -66,7 +66,7 @@ void AEnemiesManager::EnemyAttack()
 		UBlackboardComponent* bb = UAIBlueprintHelperLibrary::GetBlackboard(enemy);
 		uint8 state = bb->GetValueAsEnum("state");
 
-		if (state == (uint8)EnemyState::INPOSITION)
+		if (state == (uint8)EnemyState::INPOSITION && !enemy->dead)
 			validIndexes.push_back(index);
 
 		++index;

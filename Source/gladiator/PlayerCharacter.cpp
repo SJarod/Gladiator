@@ -71,7 +71,8 @@ void APlayerCharacter::setMtlBlink(bool activate)
 
 void APlayerCharacter::setMtlBlinkFalse()
 {
-	if (health != 1)
+	//blink continueously if low health
+	//if (health != 1)
 		setMtlBlink(false);
 }
 

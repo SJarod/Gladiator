@@ -10,7 +10,7 @@
 
 UBTService_SafePos::UBTService_SafePos(const FObjectInitializer& ObjectInitializer)
 {
-	NodeName = TEXT("Randomize Safe Pos");
+	NodeName = TEXT("Random Strafe");
 }
 
 void UBTService_SafePos::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
@@ -25,7 +25,9 @@ void UBTService_SafePos::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* Node
 		const FVector rightDir = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 
 		//beta is a vector that will be added to alpha to make a new position
-		int dir = rand() % 3 - 1;
+		int dir = rand() % 2;
+		dir == 0 ? dir = -1 : dir = 1;
+
 		FVector beta = rightDir * dir;
 		beta *= 250.f;
 
